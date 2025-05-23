@@ -132,7 +132,10 @@
           order: 1;
           flex-grow: 0;
           text-align: left;
-          user-select: none;       
+          user-select: none;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;      
         }
     
         .secondary-button {
@@ -173,6 +176,9 @@
           flex-grow: 0;
           text-align: left;
           user-select: none;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;      
         }
         
         .hero-visual {
@@ -184,13 +190,12 @@
           flex: none;
           display: flex;
           justify-content: center;
-          align-items: center;
-          /* Add this for the square hack: */
+          align-items: center;      
         }
         .hero-visual::before {
           content: "";
           display: block;
-          padding-top: 100%; /* This makes it a perfect square */
+          padding-top: 100%; /* This makes it a perfect square */    
         }
         .hero-visual > * {
           position: absolute;
@@ -270,6 +275,10 @@
             width: 72.14%;
             height: 72.14%;
             z-index: 2;
+            user-select: none;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;      
         }
   
         .border {
@@ -278,6 +287,10 @@
             transform: scale(1) rotate(0deg);
             transition: scale 0.5s ease-out, rotate 36000s linear;
             will-change: scale, rotate;
+            user-select: none;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;      
         }
   
         .center:hover ~ .border {
