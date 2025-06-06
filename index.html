@@ -41,10 +41,6 @@
         button:hover {
             background-color: #45a049;
         }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
     </style>
 </head>
 <body>
@@ -67,74 +63,42 @@
                 <td contenteditable="true">25</td>
                 <td contenteditable="true">Los Angeles</td>
             </tr>
-            <tr>
-                <td contenteditable="true">Bob Johnson</td>
-                <td contenteditable="true">35</td>
-                <td contenteditable="true">Chicago</td>
-            </tr>
         </tbody>
     </table>
 
-    <button id="downloadBtn" onclick="generatePDF()" disabled>Download PDF</button>
+    <button onclick="generatePDF()">Download PDF</button>
 
-    <!-- Include jsPDF and autoTable libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <script>
-        // Disable button until scripts are loaded
-        const downloadBtn = document.getElementById('downloadBtn');
-
-        // Check if scripts are loaded
-        function checkScriptsLoaded() {
-            if (window.jspdf && window.jspdf.jsPDF && window.jsPDFAutoTable) {
-                console.log('jsPDF and autoTable loaded successfully');
-                downloadBtn.disabled = false; // Enable button
-                downloadBtn.innerText = 'Download PDF';
-            } else {
-                console.error('jsPDF or autoTable failed to load');
-                alert('Error: jsPDF or autoTable failed to load. Please check your internet connection or try refreshing the page.');
-                downloadBtn.innerText = 'Libraries Failed to Load';
-            }
-        }
-
-        // Run check after scripts load
-        window.addEventListener('load', checkScriptsLoaded);
-
         function generatePDF() {
             try {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
 
-                // Get the table element
                 const table = document.getElementById('myTable');
                 const rows = table.querySelectorAll('tr');
                 let rowData = [];
 
-                // Extract table data
                 rows.forEach(row => {
                     const cells = row.querySelectorAll('th, td');
                     const rowArray = [];
-                    cells.forEach(cell => {
-                        rowArray.push(cell.innerText || '');
-                    });
+                    cells.forEach(cell => rowArray.push(cell.innerText || ''));
                     rowData.push(rowArray);
                 });
 
-                // Add table to PDF using autoTable
                 doc.autoTable({
-                    head: [rowData[0]], // Header row
-                    body: rowData.slice(1), // Body rows
+                    head: [rowData[0]],
+                    body: rowData.slice(1),
                     theme: 'grid',
                     styles: { fontSize: 12, cellPadding: 5 },
-                    headStyles: { fillColor: [76, 175, 80], textColor: [255, 255, 255] },
-                    margin: { top: 10 }
+                    headStyles: { fillColor: [76, 175, 80], textColor: [255, 255, 255] }
                 });
 
-                // Trigger PDF download
                 doc.save('table.pdf');
             } catch (error) {
-                console.error('Error generating PDF:', error);
-                alert('An error occurred while generating the PDF: ' + error.message);
+                console.error('Error:', error);
+                alert('Failed to generate PDF. Check your internet connection or console for details.');
             }
         }
     </script>
