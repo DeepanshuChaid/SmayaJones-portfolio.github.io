@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editable Table with PDF Download</title>
     <style>
-        /* Styling the table */
         table {
             width: 80%;
             margin: 20px auto;
@@ -42,6 +41,10 @@
         button:hover {
             background-color: #45a049;
         }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -72,20 +75,33 @@
         </tbody>
     </table>
 
-    <button onclick="generatePDF()">Download PDF</button>
+    <button id="downloadBtn" onclick="generatePDF()" disabled>Download PDF</button>
 
     <!-- Include jsPDF and autoTable libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
     <script>
+        // Disable button until scripts are loaded
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        // Check if scripts are loaded
+        function checkScriptsLoaded() {
+            if (window.jspdf && window.jspdf.jsPDF && window.jsPDFAutoTable) {
+                console.log('jsPDF and autoTable loaded successfully');
+                downloadBtn.disabled = false; // Enable button
+                downloadBtn.innerText = 'Download PDF';
+            } else {
+                console.error('jsPDF or autoTable failed to load');
+                alert('Error: jsPDF or autoTable failed to load. Please check your internet connection or try refreshing the page.');
+                downloadBtn.innerText = 'Libraries Failed to Load';
+            }
+        }
+
+        // Run check after scripts load
+        window.addEventListener('load', checkScriptsLoaded);
+
         function generatePDF() {
             try {
-                // Check if jsPDF and autoTable are loaded
-                if (!window.jspdf || !window.jspdf.jsPDF || !window.jsPDFAutoTable) {
-                    alert('Error: jsPDF or autoTable library failed to load. Please check your internet connection.');
-                    return;
-                }
-
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
 
@@ -118,7 +134,7 @@
                 doc.save('table.pdf');
             } catch (error) {
                 console.error('Error generating PDF:', error);
-                alert('An error occurred while generating the PDF. Please check the console for details.');
+                alert('An error occurred while generating the PDF: ' + error.message);
             }
         }
     </script>
